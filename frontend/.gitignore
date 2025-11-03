@@ -93,11 +93,6 @@ public
 tmp/
 temp/
 
-# ==============================
-# Backend Folder (ignore)
-# ==============================
-/backend/
-/server/
-/api/
-/springboot-backend/
+
+
 
