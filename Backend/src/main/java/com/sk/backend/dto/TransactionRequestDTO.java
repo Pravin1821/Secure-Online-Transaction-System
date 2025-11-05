@@ -1,64 +1,43 @@
-package com.sk.backend.model;
+package com.sk.backend.dto;
 
-import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
-import java.util.UUID;
+public class TransactionRequestDTO {
 
-@Entity
-public class TransactionModel {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private UUID id;
-
-    @NotNull
+    @NotBlank(message = "Fullname is required")
+    @Size(max=100)
     private String fullName;
 
-    @NotNull
+    @NotBlank(message = "Username is required")
+    @Size(max=100)
     private String userName;
 
-    @NotNull
-    @Email
-    @Column(unique = true)
+    @NotBlank(message = "Email is required")
+    @Email(message = "Email should be valid")
     private String email;
 
-    @NotNull
-    @Column(unique = true)
+    @NotBlank(message = "Number is required")
     @Pattern(
             regexp = "^[6-9]\\d{9}$",
             message = "Invalid Indian mobile number. Must be 10 digits and start with 6, 7, 8, or 9"
     )
     private String mobileNumber;
 
-
-    @NotNull
+    @NotBlank
     @Size(min = 8, message = "Password must be at least 8 characters")
-    @Pattern(
-            regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$",
-            message = "Password must contain uppercase, lowercase, number and special character"
-    )
     private String password;
 
-    @NotNull
+    @NotBlank
     private String confirmPassword;
 
-    @NotNull
+    @NotBlank(message = "Address is required")
     private String address;
 
-    @NotNull
+    @NotBlank(message = "Security Question is required")
     private String securityQuestion;
-
-    public UUID getId() {
-        return id;
-    }
-
-    public void setId(UUID id) {
-        this.id = id;
-    }
 
     public String getFullName() {
         return fullName;
@@ -123,6 +102,4 @@ public class TransactionModel {
     public void setSecurityQuestion(String securityQuestion) {
         this.securityQuestion = securityQuestion;
     }
-
-
 }

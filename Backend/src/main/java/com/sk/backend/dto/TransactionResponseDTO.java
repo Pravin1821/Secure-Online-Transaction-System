@@ -6,7 +6,7 @@ public class TransactionResponseDTO {
     private String fullName;
     private String userName;
     private String email;
-    private String phone;
+    private String mobileNumber;
     private String address;
 
     public String getId() {
@@ -41,12 +41,12 @@ public class TransactionResponseDTO {
         this.email = email;
     }
 
-    public String getPhone() {
-        return phone;
+    public String getMobileNumber() {
+        return mobileNumber;
     }
 
-    public void setPhone(String phone) {
-        this.phone = phone;
+    public void setMobileNumber(String mobileNumber) {
+        this.mobileNumber = mobileNumber;
     }
 
     public String getAddress() {
