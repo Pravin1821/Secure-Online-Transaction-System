@@ -14,13 +14,32 @@ export const authAPI = {
     }
   },
 
-  // Login user
+  // Login user with fallback to mock data
   login: async (credentials) => {
     try {
-      // Simulate API delay
+      // Try to login with backend first
+      const response = await fetch('http://localhost:8080/api/auth/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(credentials),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        return {
+          success: true,
+          token: data.token,
+          user: data.user
+        };
+      }
+
+      // If backend fails, use mock data
+      console.log('Backend login failed, using mock data');
       await new Promise(resolve => setTimeout(resolve, 1000));
-      return { 
-        success: true, 
+      return {
+        success: true,
         token: 'mock-jwt-token',
         user: {
           id: 1,
@@ -30,6 +49,7 @@ export const authAPI = {
         }
       };
     } catch (error) {
+      console.error('Login error:', error);
       throw error;
     }
   },

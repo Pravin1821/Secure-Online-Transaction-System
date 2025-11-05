@@ -11,8 +11,6 @@ public class TransactionMapper {
         transDTO.setFullName(transactionModel.getFullName());
         transDTO.setUserName(transactionModel.getUserName());
         transDTO.setEmail(transactionModel.getEmail());
-        // Fix: map mobile number from model -> DTO (was incorrectly reading from DTO
-        // itself)
         transDTO.setMobileNumber(transactionModel.getMobileNumber());
         transDTO.setAddress(transactionModel.getAddress());
 
@@ -27,8 +25,6 @@ public class TransactionMapper {
         toModel.setMobileNumber(transactionRequestDTO.getMobileNumber());
         toModel.setAddress(transactionRequestDTO.getAddress());
         toModel.setSecurityQuestion(transactionRequestDTO.getSecurityQuestion());
-        toModel.setPassword(transactionRequestDTO.getPassword());
-        toModel.setConfirmPassword(transactionRequestDTO.getConfirmPassword());
 
         return toModel;
     }

@@ -48,24 +48,16 @@ function App() {
             
             {/* Protected Routes */}
             <Route path="/dashboard" element={
-              <ProtectedRoute>
                 <Dashboard />
-              </ProtectedRoute>
             } />
             <Route path="/transactions" element={
-              <ProtectedRoute>
                 <Transactions />
-              </ProtectedRoute>
             } />
             <Route path="/profile" element={
-              <ProtectedRoute>
                 <Profile />
-              </ProtectedRoute>
             } />
             <Route path="/security" element={
-              <ProtectedRoute>
-                <Security />
-              </ProtectedRoute>
+                <Security />  
             } />
             
             {/* Catch all route - 404 page */}

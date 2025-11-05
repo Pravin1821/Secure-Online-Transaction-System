@@ -1,5 +1,6 @@
-import React, { createContext, useContext, useState } from 'react';
+import React, { createContext, useContext, useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
+import { authAPI } from '../utils/api';
 
 const AuthContext = createContext();
 
@@ -13,32 +14,41 @@ export const useAuth = () => {
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [token, setToken] = useState(localStorage.getItem('token'));
+
+  // Check for existing token on mount
+  useEffect(() => {
+    const storedToken = localStorage.getItem('token');
+    if (storedToken) {
+      setToken(storedToken);
+      setIsAuthenticated(true);
+      // TODO: Validate token and fetch user data
+    }
+    setLoading(false);
+  }, []);
 
   const login = async (credentials) => {
     setLoading(true);
     try {
-      // TODO: Replace with actual API call
-      const response = await fetch('http://localhost:8080/api/auth/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(credentials),
-      });
-
-      if (!response.ok) {
-        throw new Error('Invalid credentials');
+      const response = await authAPI.login(credentials);
+      
+      if (response.success) {
+        setUser(response.user);
+        setToken(response.token);
+        setIsAuthenticated(true);
+        localStorage.setItem('token', response.token);
+        toast.success('Login successful!');
+      } else {
+        throw new Error('Login failed');
       }
-
-      const data = await response.json();
-      setUser(data.user);
-      setIsAuthenticated(true);
-      setLoading(false);
-      toast.success('Login successful!');
     } catch (error) {
-      toast.error('Login failed: ' + error.message);
+      toast.error('Login failed: ' + (error.message || 'Unknown error'));
+      setIsAuthenticated(false);
+      setToken(null);
+      localStorage.removeItem('token');
+    } finally {
       setLoading(false);
     }
   };
@@ -70,12 +80,15 @@ export const AuthProvider = ({ children }) => {
 
   const logout = () => {
     setUser(null);
+    setToken(null);
     setIsAuthenticated(false);
+    localStorage.removeItem('token');
     toast.success('You have been logged out securely.');
   };
 
   const value = {
     user,
+    token,
     loading,
     isAuthenticated,
     login,

@@ -1,0 +1,16 @@
+### Create new account for Transaction
+POST http://localhost:5000/api/auth/register
+content-Type: application/json
+
+{
+  "fullName": "Prabu P",
+  "userName": "prabu@123",
+  "email": "prabu@gmail.com",
+  "mobileNumber": "9877756780",
+  "password": "Test@123",
+  "confirmPassword": "Test@123",
+  "address": "Salem, TamilNadu, India",
+  "securityQuestion": "What is your first pet’s name?"
+}
+
+###

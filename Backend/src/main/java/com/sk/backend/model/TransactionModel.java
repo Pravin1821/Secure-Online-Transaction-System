@@ -38,12 +38,12 @@ public class TransactionModel {
     @NotNull
     @Size(min = 8, message = "Password must be at least 8 characters")
     @Pattern(
-            regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$",
+            regexp = "^(?=.*[A-Z])(?=.*[a-z])(?=.*\\d)(?=.*[@$!%*?&]).+$",
             message = "Password must contain uppercase, lowercase, number and special character"
     )
     private String password;
 
-    @NotNull
+    @Transient
     private String confirmPassword;
 
     @NotNull

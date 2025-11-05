@@ -11,6 +11,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class TransactionService {
@@ -40,7 +42,36 @@ public class TransactionService {
         }
         TransactionModel transactionModel = TransactionMapper.toModel(transactionRequestDTO);
         transactionModel.setPassword(passwordEncoder.encode(transactionRequestDTO.getPassword()));
-        TransactionModel savedtransactionModel = transactionRepository.save(TransactionMapper.toModel(transactionRequestDTO));
+        TransactionModel savedtransactionModel = transactionRepository.save(transactionModel);
         return TransactionMapper.toDto(savedtransactionModel);
+    }
+
+    public Optional<TransactionResponseDTO> getById(UUID id) {
+        return transactionRepository.findById(id)
+                .map(TransactionMapper::toDto);
+    }
+
+    public TransactionResponseDTO updateAccountByUsername(String username, TransactionRequestDTO dto) {
+        TransactionModel existing = transactionRepository.findByUserName(username)
+                .orElseThrow(() -> new RuntimeException("User not found with username: " + username));
+
+        existing.setFullName(dto.getFullName());
+        existing.setEmail(dto.getEmail());
+        existing.setMobileNumber(dto.getMobileNumber());
+        existing.setAddress(dto.getAddress());
+        existing.setSecurityQuestion(dto.getSecurityQuestion());
+
+        if (dto.getPassword() != null && !dto.getPassword().isBlank()) {
+            existing.setPassword(passwordEncoder.encode(dto.getPassword()));
+        }
+
+        TransactionModel updated = transactionRepository.save(existing);
+        return TransactionMapper.toDto(updated);
+    }
+
+    public void deleteAccountByUsername(String username) {
+        TransactionModel existing = transactionRepository.findByUserName(username)
+                .orElseThrow(() -> new RuntimeException("User not found with username: " + username));
+        transactionRepository.delete(existing);
     }
 }
